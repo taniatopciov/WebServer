@@ -1,13 +1,13 @@
 package config;
 
-import io_file_manager.IJsonParser;
+import io_file_manager.JsonParser;
 
 public class ConfigFileReader {
 
     private String configFilePath = "config.json";
-    private IJsonParser jsonParser;
+    private JsonParser jsonParser;
 
-    public ConfigFileReader(IJsonParser jsonParser) {
+    public ConfigFileReader(JsonParser jsonParser) {
         this.jsonParser = jsonParser;
     }
 
