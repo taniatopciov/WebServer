@@ -2,7 +2,7 @@ package config;
 
 import exceptions.EmptyFileException;
 import exceptions.InvalidFileTypeException;
-import io_file_manager.IJsonParser;
+import io_file_manager.JsonParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 public class ConfigFileReaderTest {
 
     @Mock
-    private IJsonParser jsonParser;
+    private JsonParser jsonParser;
 
     private ConfigFileReader configFileReader;
 
