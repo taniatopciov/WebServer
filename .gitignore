@@ -1,0 +1,7 @@
+# Default ignored files
+/workspace.xml
+out/
+.idea/
+*.iml
+.gradle/
+build/
