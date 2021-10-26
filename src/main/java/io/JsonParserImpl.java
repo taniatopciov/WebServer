@@ -1,4 +1,4 @@
-package io_file_manager;
+package io;
 
 import com.google.gson.Gson;
 import exceptions.EmptyFileException;

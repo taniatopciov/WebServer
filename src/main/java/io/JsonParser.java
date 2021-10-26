@@ -1,4 +1,4 @@
-package io_file_manager;
+package io;
 
 import exceptions.EmptyFileException;
 import exceptions.InvalidFileTypeException;

@@ -1,6 +1,5 @@
-package io_file_manager;
+package io;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface FileContentReader {
