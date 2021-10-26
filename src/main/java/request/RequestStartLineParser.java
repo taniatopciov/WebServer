@@ -3,9 +3,9 @@ package request;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-public class RequestParser {
+public class RequestStartLineParser {
 
-    public Request parseRequest(String request) {
+    public RequestStartLine parseRequestStartLine(String request) {
         if (request == null || request.isEmpty()) {
             return null;
         }
@@ -21,7 +21,7 @@ public class RequestParser {
                 return null;
             }
 
-            return new Request(method, resource, version);
+            return new RequestStartLine(method, resource, version);
 
         } catch (NoSuchElementException e) {
             return null;

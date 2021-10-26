@@ -1,6 +1,6 @@
 package config;
 
-import io_file_manager.JsonParser;
+import io.JsonParser;
 
 public class ConfigFileReader {
 
