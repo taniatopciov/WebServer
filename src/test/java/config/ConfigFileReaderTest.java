@@ -2,7 +2,7 @@ package config;
 
 import exceptions.EmptyFileException;
 import exceptions.InvalidFileTypeException;
-import io_file_manager.JsonParser;
+import io.JsonParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
