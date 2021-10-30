@@ -8,13 +8,13 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
-public class HeaderParserTest {
+public class HeaderParserImplTest {
 
-    private HeaderParser headerParser;
+    private HeaderParserImpl headerParser;
 
     @Before
     public void setUp() {
-        headerParser = new HeaderParser();
+        headerParser = new HeaderParserImpl();
     }
 
     @Test

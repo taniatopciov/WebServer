@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -35,14 +36,14 @@ public class JsonParserImplTest {
 
     @Test(expected = EmptyFileException.class)
     public void parseFile_emptyFileContent() throws Exception {
-        when(fileContentReader.readFileContent("myfile.json")).thenReturn("");
+        when(fileContentReader.readFileContent("myfile.json")).thenReturn("".getBytes(StandardCharsets.UTF_8));
 
         jsonParser.parseFile("myfile.json", Object.class);
     }
 
     @Test(expected = InvalidFileTypeException.class)
     public void parseFile_invalidFileType() throws Exception {
-        when(fileContentReader.readFileContent("myfile.txt")).thenReturn("niste text" + '\n' + "foarte random");
+        when(fileContentReader.readFileContent("myfile.txt")).thenReturn(("niste text" + '\n' + "foarte random").getBytes(StandardCharsets.UTF_8));
 
         jsonParser.parseFile("myfile.txt", Object.class);
     }
@@ -56,7 +57,7 @@ public class JsonParserImplTest {
 
     @Test
     public void parseFile_works() throws Exception {
-        when(fileContentReader.readFileContent("myfile.json")).thenReturn("{\"myString\": \"John\", \"myInt\": 5}");
+        when(fileContentReader.readFileContent("myfile.json")).thenReturn("{\"myString\": \"John\", \"myInt\": 5}".getBytes(StandardCharsets.UTF_8));
 
         MyClass myClass = jsonParser.parseFile("myfile.json", MyClass.class);
 
