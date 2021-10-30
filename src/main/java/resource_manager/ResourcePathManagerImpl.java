@@ -1,5 +1,9 @@
 package resource_manager;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 public class ResourcePathManagerImpl implements ResourcePathManager {
 
     private final ResourceAbsolutePathProvider resourceAbsolutePathProvider;
@@ -26,6 +30,12 @@ public class ResourcePathManagerImpl implements ResourcePathManager {
             resourcePath = rootFolder + "/" + path;
         } else {
             resourcePath = rootFolder + path;
+        }
+
+        try {
+            resourcePath = URLDecoder.decode(resourcePath, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
         if (!resourceFileManager.checkFileExists(resourcePath)) {

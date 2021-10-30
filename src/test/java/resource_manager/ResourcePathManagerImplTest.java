@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -85,6 +86,33 @@ public class ResourcePathManagerImplTest {
         String resourcePath = resourcePathManager.getResourcePath("root/", "path.html");
 
         assertEquals("root/path.html", resourcePath);
+    }
+
+    @Test
+    public void getResourcePath_RootPathWithBS_PathNoBS_FileExists_SpacesInFileName() {
+        when(resourceFileManager.checkFileExists("root/random path.html")).thenReturn(true);
+
+        String resourcePath = resourcePathManager.getResourcePath("root/", "random path.html");
+
+        assertEquals("root/random path.html", resourcePath);
+    }
+
+    @Test
+    public void getResourcePath_RootPathWithBS_PathNoBS_FileExists_SpacesInFileName2() {
+        when(resourceFileManager.checkFileExists("root/random path.html")).thenReturn(true);
+
+        String resourcePath = resourcePathManager.getResourcePath("root/", "random%20path.html");
+
+        assertEquals("root/random path.html", resourcePath);
+    }
+
+    @Test
+    public void getResourcePath_RootPathWithBS_PathNoBS_FileExists_SpacesInFileName2_False() {
+        when(resourceFileManager.checkFileExists("root/random path.html")).thenReturn(true);
+
+        String resourcePath = resourcePathManager.getResourcePath("root/", "random%20path.html");
+
+        assertNotEquals("root/random%20path.html", resourcePath);
     }
 
     @Test
