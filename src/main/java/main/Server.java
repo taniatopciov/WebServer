@@ -1,8 +1,12 @@
 package main;
 
 import config.ConfigFile;
+import config.ConfigFileWriter;
+import config.ServerState;
 import io.FileContentReaderImpl;
 import org.apache.commons.httpclient.HttpStatus;
+import request.HeaderParser;
+import request.HeaderParserImpl;
 import request.RequestStartLine;
 import request.RequestStartLineParser;
 import resource_manager.*;
@@ -20,17 +24,22 @@ import java.util.HashMap;
 public class Server {
 
     private ConfigFile configFile;
+    private ConfigFileWriter configFileWriter;
     private ServerSocket serverSocket;
     private RequestStartLineParser requestStartLineParser;
     private ResourcePathManager resourcePathManager;
     private ContentTypeProvider contentTypeProvider;
+    private HeaderParser headerParser;
+    private ResourceAbsolutePathProvider resourceAbsolutePathProvider;
 
     public Server(ConfigFile configFile) {
-
         this.configFile = configFile;
         requestStartLineParser = new RequestStartLineParser();
         resourcePathManager = new ResourcePathManagerImpl(new ResourceAbsolutePathProviderImpl(), new ResourceFileManagerImpl());
         contentTypeProvider = new ContentTypeProviderImpl();
+        headerParser = new HeaderParserImpl();
+        configFileWriter = new ConfigFileWriter();
+        resourceAbsolutePathProvider = new ResourceAbsolutePathProviderImpl();
     }
 
     public void startServer() {
@@ -59,21 +68,14 @@ public class Server {
         ) {
             RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine(in.readLine());
 
-            if (requestStartLine == null) {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "text/html; charset=UTF-8");
-                writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_BAD_REQUEST), headers, getClass().getResource("/DefaultResponses/400.html").getPath());
-                dataOut.flush();
-                socket.close();
-                return;
-            }
+            HashMap<String, String> responseHeaders = new HashMap<>();
 
-            if (!requestStartLine.method.equals("GET") && !requestStartLine.method.equals("HEAD")) {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "text/html; charset=UTF-8");
-                writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_METHOD_NOT_ALLOWED), headers, getClass().getResource("/DefaultResponses/501.html").getPath());
-                dataOut.flush();
-                socket.close();
+            if (requestStartLine == null) {
+                responseHeaders.put("Content-Type", "text/html; charset=UTF-8");
+
+                writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_BAD_REQUEST), responseHeaders, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/404.html"));
+
+                closeConnection(dataOut, socket);
                 return;
             }
 
@@ -86,14 +88,71 @@ public class Server {
                 line = in.readLine();
             }
 
-            HashMap<String, String> responseHeaders = new HashMap<>();
+            if (!requestStartLine.method.equals("GET") && !requestStartLine.method.equals("HEAD")) {
 
-            String pathToResponseBody = resourcePathManager.getResourcePath(configFile.getRootFolder(), requestStartLine.target);
+                if (requestStartLine.method.equals("POST") && requestStartLine.target.equals("/configserver")) {
+
+                    HashMap<String, String> requestHeaders = headerParser.parseHeaders(requestHeadersList);
+                    boolean modified = false;
+
+                    if (requestHeaders.containsKey("ServerState")) {
+                        ServerState serverState = ServerState.valueOf(requestHeaders.get("ServerState"));
+                        configFile.setState(serverState);
+                        modified = true;
+                    }
+                    if (requestHeaders.containsKey("MaintenanceFilePath")) {
+                        String maintenanceFilePath = requestHeaders.get("MaintenanceFilePath");
+                        configFile.setMaintenanceFilePath(maintenanceFilePath);
+                        modified = true;
+                    }
+                    if (requestHeaders.containsKey("RootFolder")) {
+                        String rootFolder = requestHeaders.get("RootFolder");
+                        configFile.setRootFolder(rootFolder);
+                        modified = true;
+                    }
+
+                    if (modified) {
+                        configFileWriter.writeConfigFile(configFile);
+                    }
+
+                    responseHeaders.put("Content-Type", "text/html; charset=UTF-8");
+
+                    writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_OK), responseHeaders, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/200.html"));
+
+                    closeConnection(dataOut, socket);
+
+                    if (configFile.getState() == ServerState.Stopped) {
+                        System.exit(0);
+                    }
+
+                    return;
+
+                } else {
+                    responseHeaders.put("Content-Type", "text/html; charset=UTF-8");
+
+                    writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_METHOD_NOT_ALLOWED), responseHeaders, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/405.html"));
+
+                    closeConnection(dataOut, socket);
+                    return;
+                }
+            }
+
+            String pathToResponseBody;
+
+            if (configFile.getState() == ServerState.Maintenance) {
+                pathToResponseBody = configFile.getMaintenanceFilePath();
+            } else {
+                pathToResponseBody = resourcePathManager.getResourcePath(configFile.getRootFolder(), requestStartLine.target);
+            }
+
             String contentType = contentTypeProvider.getContentType(pathToResponseBody);
 
             responseHeaders.put("Content-Type", contentType);
 
             writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_OK), responseHeaders, pathToResponseBody);
+
+            closeConnection(dataOut, socket);
+            return;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -118,5 +177,10 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void closeConnection(BufferedOutputStream outStream, Socket socket) throws IOException {
+        outStream.flush();
+        socket.close();
     }
 }
