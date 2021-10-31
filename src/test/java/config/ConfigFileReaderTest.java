@@ -69,12 +69,13 @@ public class ConfigFileReaderTest {
 
     @Test
     public void readConfigFile_works() throws Exception {
-        when(jsonParser.parseFile("config.json", ConfigFile.class)).thenReturn(new ConfigFile("8001", "www", ServerState.Running));
+        when(jsonParser.parseFile("config.json", ConfigFile.class)).thenReturn(new ConfigFile("8001", "www", "maintenance.html", ServerState.Running));
 
         ConfigFile configFile = configFileReader.readConfigFile();
 
         assertEquals("8001", configFile.getPortNumber());
         assertEquals("www", configFile.getRootFolder());
+        assertEquals("maintenance.html", configFile.getMaintenanceFilePath());
         assertEquals(ServerState.Running, configFile.getState());
     }
 }
