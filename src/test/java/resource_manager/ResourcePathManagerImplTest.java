@@ -6,8 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -23,6 +22,13 @@ public class ResourcePathManagerImplTest {
     @Before
     public void setUp() {
         resourcePathManager = new ResourcePathManagerImpl(resourceAbsolutePathProvider, resourceFileManager);
+    }
+
+    @Test
+    public void getResourcePath_ThroesUnsupportedEncodingException() {
+        String resourcePath = resourcePathManager.getResourcePath("testÃ¼", null);
+
+        assertNull(resourcePath);
     }
 
     @Test

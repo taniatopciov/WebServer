@@ -42,4 +42,11 @@ public class ResourceAbsolutePathProviderImplTest {
 
         assertEquals("", absolutePath);
     }
+
+    @Test
+    public void getResourceAbsolutePath_IllegalCharacterPath() {
+        String absolutePath = resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/^IXIC");
+
+        assertEquals("", absolutePath);
+    }
 }
