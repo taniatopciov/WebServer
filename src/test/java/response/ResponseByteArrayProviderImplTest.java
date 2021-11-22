@@ -36,7 +36,7 @@ public class ResponseByteArrayProviderImplTest {
         String pathToBody = new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/200.html");
 
         byte[] responseBytes = responseByteArrayProvider.getResponseBytes(responseStatusLine, headers, pathToBody);
-        
+
         StringBuilder stringBuilder = new StringBuilder();
         ResponseStatusLineBuilder responseStatusLineBuilder = new ResponseStatusLineBuilderImpl();
         HeaderBuilder headerBuilder = new HeaderBuilderImpl();
@@ -65,18 +65,134 @@ public class ResponseByteArrayProviderImplTest {
     }
 
     @Test
-    public void getResponseBytes_NullParameters() throws IOException {
-        byte[] responseBytes = responseByteArrayProvider.getResponseBytes(null, null, null);
+    public void getResponseBytes_NullResponseStatusLine() throws IOException {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Location", "http://www.google.com/");
+        headers.put("Server", "gws");
+
+        String pathToBody = new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/200.html");
+
+        byte[] responseBytes = responseByteArrayProvider.getResponseBytes(null, headers, pathToBody);
 
         StringBuilder stringBuilder = new StringBuilder();
         ResponseStatusLineBuilder responseStatusLineBuilder = new ResponseStatusLineBuilderImpl();
         HeaderBuilder headerBuilder = new HeaderBuilderImpl();
 
-        HashMap<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "text/html; charset=UTF-8");
+        HashMap<String, String> headers2 = new HashMap<>();
+        headers2.put("Content-Type", "text/html; charset=UTF-8");
 
         stringBuilder.append(responseStatusLineBuilder.buildResponseStatusLine(new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_INTERNAL_SERVER_ERROR)));
-        stringBuilder.append(headerBuilder.buildHeaders(headers));
+        stringBuilder.append(headerBuilder.buildHeaders(headers2));
+
+        String content = Files.readString(Path.of(new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/500.html")), StandardCharsets.US_ASCII);
+        stringBuilder.append(content);
+
+        byte[] expected = stringBuilder.toString().getBytes();
+
+        assertArrayEquals(expected, responseBytes);
+    }
+
+    @Test
+    public void getResponseBytes_EmptyHeaders() throws IOException {
+        ResponseStatusLine responseStatusLine = new ResponseStatusLine("HTTP/1.1", 200);
+        HashMap<String, String> headers = new HashMap<>();
+        String pathToBody = new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/200.html");
+
+        byte[] responseBytes = responseByteArrayProvider.getResponseBytes(responseStatusLine, headers, pathToBody);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        ResponseStatusLineBuilder responseStatusLineBuilder = new ResponseStatusLineBuilderImpl();
+        HeaderBuilder headerBuilder = new HeaderBuilderImpl();
+
+        HashMap<String, String> headers2 = new HashMap<>();
+        headers2.put("Content-Type", "text/html; charset=UTF-8");
+
+        stringBuilder.append(responseStatusLineBuilder.buildResponseStatusLine(new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_INTERNAL_SERVER_ERROR)));
+        stringBuilder.append(headerBuilder.buildHeaders(headers2));
+
+        String content = Files.readString(Path.of(new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/500.html")), StandardCharsets.US_ASCII);
+        stringBuilder.append(content);
+
+        byte[] expected = stringBuilder.toString().getBytes();
+
+        assertArrayEquals(expected, responseBytes);
+    }
+
+    @Test
+    public void getResponseBytes_NullHeaders() throws IOException {
+        ResponseStatusLine responseStatusLine = new ResponseStatusLine("HTTP/1.1", 200);
+        String pathToBody = new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/200.html");
+
+        byte[] responseBytes = responseByteArrayProvider.getResponseBytes(responseStatusLine, null, pathToBody);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        ResponseStatusLineBuilder responseStatusLineBuilder = new ResponseStatusLineBuilderImpl();
+        HeaderBuilder headerBuilder = new HeaderBuilderImpl();
+
+        HashMap<String, String> headers2 = new HashMap<>();
+        headers2.put("Content-Type", "text/html; charset=UTF-8");
+
+        stringBuilder.append(responseStatusLineBuilder.buildResponseStatusLine(new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_INTERNAL_SERVER_ERROR)));
+        stringBuilder.append(headerBuilder.buildHeaders(headers2));
+
+        String content = Files.readString(Path.of(new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/500.html")), StandardCharsets.US_ASCII);
+        stringBuilder.append(content);
+
+        byte[] expected = stringBuilder.toString().getBytes();
+
+        assertArrayEquals(expected, responseBytes);
+    }
+
+    @Test
+    public void getResponseBytes_PathToBodyNull() throws IOException {
+        ResponseStatusLine responseStatusLine = new ResponseStatusLine("HTTP/1.1", 200);
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Server", "gws");
+        headers.put("Expires", "Fri, 24 Apr 2020 18:53:12 GMT");
+
+        String pathToBody = new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/404.html");
+
+        byte[] responseBytes = responseByteArrayProvider.getResponseBytes(responseStatusLine, headers, null);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        ResponseStatusLineBuilder responseStatusLineBuilder = new ResponseStatusLineBuilderImpl();
+        HeaderBuilder headerBuilder = new HeaderBuilderImpl();
+
+        HashMap<String, String> headers2 = new HashMap<>();
+        headers2.put("Content-Type", "text/html; charset=UTF-8");
+
+        stringBuilder.append(responseStatusLineBuilder.buildResponseStatusLine(new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_INTERNAL_SERVER_ERROR)));
+        stringBuilder.append(headerBuilder.buildHeaders(headers2));
+
+        String content = Files.readString(Path.of(new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/500.html")), StandardCharsets.US_ASCII);
+        stringBuilder.append(content);
+
+        byte[] expected = stringBuilder.toString().getBytes();
+
+        assertArrayEquals(expected, responseBytes);
+    }
+
+    @Test
+    public void getResponseBytes_PathToBodyEmpty() throws IOException {
+        ResponseStatusLine responseStatusLine = new ResponseStatusLine("HTTP/1.1", 200);
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Server", "gws");
+
+        String pathToBody = new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/400.html");
+
+        byte[] responseBytes = responseByteArrayProvider.getResponseBytes(responseStatusLine, headers, "");
+
+        StringBuilder stringBuilder = new StringBuilder();
+        ResponseStatusLineBuilder responseStatusLineBuilder = new ResponseStatusLineBuilderImpl();
+        HeaderBuilder headerBuilder = new HeaderBuilderImpl();
+
+        HashMap<String, String> headers2 = new HashMap<>();
+        headers2.put("Content-Type", "text/html; charset=UTF-8");
+
+        stringBuilder.append(responseStatusLineBuilder.buildResponseStatusLine(new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_INTERNAL_SERVER_ERROR)));
+        stringBuilder.append(headerBuilder.buildHeaders(headers2));
 
         String content = Files.readString(Path.of(new ResourceAbsolutePathProviderImpl().getResourceAbsolutePath("DefaultResponses/500.html")), StandardCharsets.US_ASCII);
         stringBuilder.append(content);

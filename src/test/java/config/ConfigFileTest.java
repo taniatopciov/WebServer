@@ -70,6 +70,14 @@ public class ConfigFileTest {
     }
 
     @Test
+    public void equals_ReturnsFalse_NotInstanceofConfigFile() {
+        configFile = new ConfigFile();
+        Object o = new Object();
+
+        assertFalse(configFile.equals(o));
+    }
+
+    @Test
     public void equals_ReturnsFalse_DifferentPortNumber() {
         configFile = new ConfigFile("8090", "rootFolder", "mfp.html", ServerState.Running);
         ConfigFile configFile2 = new ConfigFile("4200", "rootFolder", "mfp.html", ServerState.Running);

@@ -1,22 +1,25 @@
 package config;
 
 import com.google.gson.Gson;
+import io.FileContentWriter;
 
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class ConfigFileWriter {
 
-    private String configFilePath = "config.json";
-    private Gson gson = new Gson();
+    private final FileContentWriter contentWriter;
+    private final String configFilePath = "config.json";
+    private final Gson gson = new Gson();
+
+    public ConfigFileWriter(FileContentWriter contentWriter) {
+        this.contentWriter = contentWriter;
+    }
 
     public void writeConfigFile(ConfigFile configFile) throws IOException {
-        FileWriter fileWriter = new FileWriter(configFilePath);
         if (configFile == null) {
-            gson.toJson(new ConfigFile(), fileWriter);
-        } else {
-            gson.toJson(configFile, fileWriter);
+            configFile = new ConfigFile();
         }
-        fileWriter.close();
+
+        contentWriter.writeContentToFile(configFilePath, gson.toJson(configFile));
     }
 }
