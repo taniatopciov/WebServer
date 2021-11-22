@@ -3,6 +3,8 @@ package main;
 import config.ConfigFile;
 import config.ConfigFileWriter;
 import config.ServerState;
+import exceptions.ServerCloseException;
+import io.FileContentWriterImpl;
 import org.apache.commons.httpclient.HttpStatus;
 import request.*;
 import resource_manager.*;
@@ -21,13 +23,14 @@ import java.util.HashMap;
 public class Server {
 
     private ConfigFile configFile;
-    private ConfigFileWriter configFileWriter;
+
+    private final ConfigFileWriter configFileWriter;
+    private final RequestStartLineParser requestStartLineParser;
+    private final ResourcePathManager resourcePathManager;
+    private final ContentTypeProvider contentTypeProvider;
+    private final HeaderParser headerParser;
+    private final ResourceAbsolutePathProvider resourceAbsolutePathProvider;
     private ServerSocket serverSocket;
-    private RequestStartLineParser requestStartLineParser;
-    private ResourcePathManager resourcePathManager;
-    private ContentTypeProvider contentTypeProvider;
-    private HeaderParser headerParser;
-    private ResourceAbsolutePathProvider resourceAbsolutePathProvider;
 
     public Server(ConfigFile configFile) {
         this.configFile = configFile;
@@ -35,7 +38,7 @@ public class Server {
         resourcePathManager = new ResourcePathManagerImpl(new ResourceAbsolutePathProviderImpl(), new ResourceFileManagerImpl());
         contentTypeProvider = new ContentTypeProviderImpl();
         headerParser = new HeaderParserImpl();
-        configFileWriter = new ConfigFileWriter();
+        configFileWriter = new ConfigFileWriter(new FileContentWriterImpl());
         resourceAbsolutePathProvider = new ResourceAbsolutePathProviderImpl();
     }
 
@@ -46,11 +49,12 @@ public class Server {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
 
-                new Thread(() -> handleConnection(clientSocket)).start();
+                Thread thread = new Thread(() -> handleConnection(clientSocket));
+                thread.setDaemon(true);
+                thread.start();
             }
-
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ServerCloseException();
         }
     }
 
@@ -67,9 +71,7 @@ public class Server {
             if (requestStartLine == null) {
                 responseHeaders.put("Content-Type", "text/html; charset=UTF-8");
 
-                writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_BAD_REQUEST), responseHeaders, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/404.html"));
-
-                closeConnection(dataOut, socket);
+                writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_BAD_REQUEST, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/404.html"));
                 return;
             }
 
@@ -95,21 +97,17 @@ public class Server {
                         configFile = newConfigFile;
                     }
 
-                    writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_OK), responseHeaders, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/200.html"));
-
-                    closeConnection(dataOut, socket);
+                    writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_OK, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/200.html"));
 
                     if (configFile.getState() == ServerState.Stopped) {
-                        System.exit(0);
+                        serverSocket.close();
                     }
 
                     return;
 
                 } else {
 
-                    writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_METHOD_NOT_ALLOWED), responseHeaders, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/405.html"));
-
-                    closeConnection(dataOut, socket);
+                    writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_METHOD_NOT_ALLOWED, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/405.html"));
                     return;
                 }
             }
@@ -126,14 +124,18 @@ public class Server {
 
             responseHeaders.put("Content-Type", contentType);
 
-            writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_OK), responseHeaders, pathToResponseBody);
-
-            closeConnection(dataOut, socket);
-            return;
+            writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_OK, pathToResponseBody);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void writeResponseAndCloseConnection(Socket socket, BufferedOutputStream dataOut, HashMap<String, String> responseHeaders, int status, String path) throws IOException {
+        writeResponseToSocket(dataOut, new ResponseStatusLine("HTTP/1.1", status), responseHeaders, path);
+
+        dataOut.flush();
+        socket.close();
     }
 
     private void writeResponseToSocket(BufferedOutputStream outStream, ResponseStatusLine responseStatusLine, HashMap<String, String> headers, String pathToBody) {
@@ -145,10 +147,5 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void closeConnection(BufferedOutputStream outStream, Socket socket) throws IOException {
-        outStream.flush();
-        socket.close();
     }
 }
