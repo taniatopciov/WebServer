@@ -5,27 +5,27 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class HeaderBuilderImplTest {
 
-    private HeaderBuilderImpl headerBuilderImpl;
+    private HeaderBuilderImpl headerBuilder;
 
     @Before
-    public void setUp() throws Exception {
-        headerBuilderImpl = new HeaderBuilderImpl();
+    public void setUp() {
+        headerBuilder = new HeaderBuilderImpl();
     }
 
     @Test
     public void buildHeaders_NullHeadersMap() {
-        String headers = headerBuilderImpl.buildHeaders(null);
+        String headers = headerBuilder.buildHeaders(null);
 
         assertEquals("\r\n", headers);
     }
 
     @Test
     public void buildHeaders_EmptyHeadersMap() {
-        String headers = headerBuilderImpl.buildHeaders(new HashMap<>());
+        String headers = headerBuilder.buildHeaders(new HashMap<>());
 
         assertEquals("\r\n", headers);
     }
@@ -38,7 +38,7 @@ public class HeaderBuilderImplTest {
         map.put("Expires", "Fri, 24 Apr 2020 18:53:12 GMT");
         map.put("Server", "gws");
 
-        String headers = headerBuilderImpl.buildHeaders(map);
+        String headers = headerBuilder.buildHeaders(map);
 
         assertEquals("Server: gws\r\nExpires: Fri, 24 Apr 2020 18:53:12 GMT\r\nLocation: http://www.google.com/\r\n\r\n", headers);
     }
@@ -51,7 +51,7 @@ public class HeaderBuilderImplTest {
         map.put("Location", "http://www.google.com/");
         map.put("Expires", "Fri, 24 Apr 2020 18:53:12 GMT");
 
-        String headers = headerBuilderImpl.buildHeaders(map);
+        String headers = headerBuilder.buildHeaders(map);
 
         assertEquals("Expires: Fri, 24 Apr 2020 18:53:12 GMT\r\nLocation: http://www.google.com/\r\n\r\n", headers);
     }

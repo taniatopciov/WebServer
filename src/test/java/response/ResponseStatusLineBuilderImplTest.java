@@ -1,18 +1,17 @@
 package response;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class ResponseStatusLineBuilderTest {
+public class ResponseStatusLineBuilderImplTest {
 
-    private ResponseStatusLineBuilder responseStatusLineBuilder;
+    private ResponseStatusLineBuilderImpl responseStatusLineBuilder;
 
     @Before
     public void setUp() {
-        responseStatusLineBuilder = new ResponseStatusLineBuilder();
+        responseStatusLineBuilder = new ResponseStatusLineBuilderImpl();
     }
 
     @Test
