@@ -54,4 +54,18 @@ public class ConfigFile {
     public void setMaintenanceFilePath(String maintenanceFilePath) {
         this.maintenanceFilePath = maintenanceFilePath;
     }
+
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof ConfigFile)) {
+            return false;
+        }
+
+        ConfigFile c = (ConfigFile) o;
+
+        return portNumber.equals(c.getPortNumber()) && rootFolder.equals(c.getRootFolder()) && maintenanceFilePath.equals(c.getMaintenanceFilePath()) && state == c.getState();
+    }
 }
