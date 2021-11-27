@@ -3,11 +3,24 @@ plugins {
     id 'jacoco'
 }
 
+plugins {
+    id "org.sonarqube" version "3.3"
+}
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+sonarqube{
+    properties{
+        property 'sonar.projectName', 'WebServer'
+        property 'sonar.projectKey', 'WebServer'
+        property 'sonar.host.url', 'http://localhost:9000'
+        property 'sonar.login', '2b5a90ed4a6c4bb2a360dbe321921b92ad66c994'
+    }
 }
 
 dependencies {
