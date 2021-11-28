@@ -1,11 +1,37 @@
 Live call tree
 
-+---------------------------------------------------------+-------------+
-|                        Call Tree                        |  Time (ms)  |
-+---------------------------------------------------------+-------------+
-|  +---main Group: 'main' Native ID: 37916                |  313  100%  |
-|  |                                                      |             |
-|  +---Monitor Ctrl-Break Group: 'main' Native ID: 42300  |   46  100%  |
-+---------------------------------------------------------+-------------+
++---------------------------------------------------------------------------------------------------------------------------------+-------------+
+|                                                            Call Tree                                                            |  Time (ms)  |
++---------------------------------------------------------------------------------------------------------------------------------+-------------+
+|  +---main Group: 'main' Native ID: 16712                                                                                        |  312  100%  |
+|  | |                                                                                                                            |             |
+|  | +---main.Main.main(String[])                                                                                                 |  312  100%  |
+|  |   |                                                                                                                          |             |
+|  |   +---Main.java:15 io.JsonParserImpl.<init>(FileContentReader)                                                               |  218   70%  |
+|  |   |                                                                                                                          |             |
+|  |   +---Main.java:15 config.ConfigFileReader.readConfigFile()                                                                  |   31   10%  |
+|  |   |                                                                                                                          |             |
+|  |   +---Main.java:13 <...> java.util.logging.Logger.getLogger(String)                                                          |   31   10%  |
+|  |   |                                                                                                                          |             |
+|  |   +---Main.java:15 <...> java.lang.ClassLoader.loadClass(String)                                                             |   15    5%  |
+|  |   |                                                                                                                          |             |
+|  |   +---Main.java:15 main.Server.<init>(ConfigFile)                                                                            |   15    5%  |
+|  |                                                                                                                              |             |
+|  +---Monitor Ctrl-Break Group: 'main' Native ID: 36232                                                                          |   31  100%  |
+|  | |                                                                                                                            |             |
+|  | +---<...> com.intellij.rt.execution.application.AppMainV2$1.run()                                                            |   31  100%  |
+|  |                                                                                                                              |             |
+|  +---Thread-0 Group: 'main' Native ID: 45432                                                                                    |   15  100%  |
+|    |                                                                                                                            |             |
+|    +---java.lang.Thread.run()                                                                                                   |   15  100%  |
+|      |                                                                                                                          |             |
+|      +---Thread.java:832 main.Server$$Lambda$82.0x00000008001523a0.run()                                                        |   15  100%  |
+|        |                                                                                                                        |             |
+|        +---main.Server.lambda$startServer$0(Socket)                                                                             |   15  100%  |
+|          |                                                                                                                      |             |
+|          +---Server.java:54 main.Server.handleConnection(Socket)                                                                |   15  100%  |
+|            |                                                                                                                    |             |
+|            +---Server.java:129 main.Server.writeResponseAndCloseConnection(Socket, BufferedOutputStream, HashMap, int, String)  |   15  100%  |
++---------------------------------------------------------------------------------------------------------------------------------+-------------+
 
-Generated by YourKit Java Profiler 2021.11-b219 November 28, 2021 08:59:08 AM
+Generated by YourKit Java Profiler 2021.11-b219 November 28, 2021 09:18:46 PM
