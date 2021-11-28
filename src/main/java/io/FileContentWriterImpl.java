@@ -6,9 +6,13 @@ import java.io.IOException;
 public class FileContentWriterImpl implements FileContentWriter {
 
     @Override
-    public void writeContentToFile(String filePath, String fileContent) throws IOException {
-        FileWriter fileWriter = new FileWriter(filePath);
-        fileWriter.write(fileContent);
-        fileWriter.close();
+    public void writeContentToFile(String filePath, String fileContent) {
+        try (
+                FileWriter fileWriter = new FileWriter(filePath);
+        ) {
+            fileWriter.write(fileContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

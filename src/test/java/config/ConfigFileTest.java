@@ -2,8 +2,7 @@ package config;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 public class ConfigFileTest {
 
@@ -52,6 +51,15 @@ public class ConfigFileTest {
         assertEquals("anotherRoot", configFile.getRootFolder());
         assertEquals("thisMaintenance.html", configFile.getMaintenanceFilePath());
         assertEquals(ServerState.MAINTENANCE, configFile.getState());
+    }
+
+    @Test
+    public void hashcode_DifferentObjects() {
+        configFile = new ConfigFile();
+        ConfigFile configFile2 = new ConfigFile();
+
+        assertNotSame(configFile, configFile2);
+        assertEquals(configFile.hashCode(), configFile2.hashCode());
     }
 
     @Test

@@ -16,37 +16,17 @@ public class ResourceAbsolutePathProviderImplTest {
     }
 
     @Test
-    public void getResourceAbsolutePath_CorrectDefaultResponseFilePath() {
+    public void getResourceAbsolutePath_CorrectPath() {
         String absolutePath = resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/404.html");
 
         assertNotEquals("", absolutePath);
     }
 
     @Test
-    public void getResourceAbsolutePath_IncorrectDefaultResponseFilePath() {
-        String absolutePath = resourceAbsolutePathProvider.getResourceAbsolutePath("/DefaultResponses/404.html/");
-
-        assertEquals("", absolutePath);
-    }
-
-    @Test
-    public void getResourceAbsolutePath_MissingDefaultResponseFilePath() {
-        String absolutePath = resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/123.html");
-
-        assertEquals("", absolutePath);
-    }
-
-    @Test
-    public void getResourceAbsolutePath_RandomPath() {
-        String absolutePath = resourceAbsolutePathProvider.getResourceAbsolutePath("abcd");
-
-        assertEquals("", absolutePath);
-    }
-
-    @Test
-    public void getResourceAbsolutePath_IllegalCharacterPath() {
-        String absolutePath = resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/^IXIC");
-
-        assertEquals("", absolutePath);
+    public void getResourceAbsolutePath_IncorrectPath() {
+        assertEquals("", resourceAbsolutePathProvider.getResourceAbsolutePath("/DefaultResponses/404.html/"));
+        assertEquals("", resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/123.html"));
+        assertEquals("", resourceAbsolutePathProvider.getResourceAbsolutePath("abcd"));
+        assertEquals("", resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/^IXIC"));
     }
 }

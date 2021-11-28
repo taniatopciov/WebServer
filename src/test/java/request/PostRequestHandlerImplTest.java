@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PostRequestHandlerImplTest {
 
@@ -93,6 +93,6 @@ public class PostRequestHandlerImplTest {
 
         ConfigFile newConfigFile = postRequestHandler.getNewConfigFile(configFile, requestHeaders);
 
-        assertTrue(configFile.equals(newConfigFile));
+        assertEquals(configFile, newConfigFile);
     }
 }

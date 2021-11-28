@@ -16,43 +16,17 @@ public class RequestStartLineParserTest {
     }
 
     @Test
-    public void parseRequest_emptyRequest() {
-        RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine("");
-        assertNull(requestStartLine);
+    public void parseRequest_invalidRequest() {
+        assertNull(requestStartLineParser.parseRequestStartLine(""));
+        assertNull(requestStartLineParser.parseRequestStartLine(null));
+        assertNull(requestStartLineParser.parseRequestStartLine(" "));
+        assertNull(requestStartLineParser.parseRequestStartLine("GET"));
+        assertNull(requestStartLineParser.parseRequestStartLine("GET /this/resource"));
+        assertNull(requestStartLineParser.parseRequestStartLine("GET /this/resource HTTP1.1 extraArgument"));
     }
 
     @Test
-    public void parseRequest_nullRequest() {
-        RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine(null);
-        assertNull(requestStartLine);
-    }
-
-    @Test
-    public void parseRequest_missingAllArguments() {
-        RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine(" ");
-        assertNull(requestStartLine);
-    }
-
-    @Test
-    public void parseRequest_missingTwoArguments() {
-        RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine("GET");
-        assertNull(requestStartLine);
-    }
-
-    @Test
-    public void parseRequest_missingOneArgument() {
-        RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine("GET /this/resource");
-        assertNull(requestStartLine);
-    }
-
-    @Test
-    public void parseRequest_hasFourArguments() {
-        RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine("GET /this/resource HTTP1.1 extraArgument");
-        assertNull(requestStartLine);
-    }
-
-    @Test
-    public void parseRequest_correct() {
+    public void parseRequest_validRequest() {
         RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine("GET /this/resource HTTP/1.1");
         assertEquals("GET", requestStartLine.getMethod());
         assertEquals("/this/resource", requestStartLine.getTarget());
