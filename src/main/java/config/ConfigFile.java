@@ -1,11 +1,13 @@
 package config;
 
+import java.util.Objects;
+
 public class ConfigFile {
 
-    private final static String defaultPortNumber = "8080";
-    private final static String defaultRootFolder = "public_html";
-    private final static ServerState defaultState = ServerState.Stopped;
-    private final static String defaultMaintenanceFilePath = "maintenance.html";
+    private static final String DEFAULT_PORT_NUMBER = "8080";
+    private static final String DEFAULT_ROOT_FOLDER = "public_html";
+    private static final ServerState DEFAULT_STATE = ServerState.STOPPED;
+    private static final String DEFAULT_MAINTENANCE_FILE_PATH = "maintenance.html";
 
     private String portNumber;
     private String rootFolder;
@@ -13,7 +15,7 @@ public class ConfigFile {
     private ServerState state;
 
     public ConfigFile() {
-        this(defaultPortNumber, defaultRootFolder, defaultMaintenanceFilePath, defaultState);
+        this(DEFAULT_PORT_NUMBER, DEFAULT_ROOT_FOLDER, DEFAULT_MAINTENANCE_FILE_PATH, DEFAULT_STATE);
     }
 
     public ConfigFile(String portNumber, String rootFolder, String maintenanceFilePath, ServerState state) {
@@ -53,6 +55,10 @@ public class ConfigFile {
 
     public void setMaintenanceFilePath(String maintenanceFilePath) {
         this.maintenanceFilePath = maintenanceFilePath;
+    }
+
+    public int hashCode() {
+        return Objects.hash(portNumber, rootFolder, maintenanceFilePath, state);
     }
 
     public boolean equals(Object o) {

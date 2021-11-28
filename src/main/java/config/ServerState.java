@@ -1,7 +1,7 @@
 package config;
 
 public enum ServerState {
-    Running,
-    Stopped,
-    Maintenance;
+    RUNNING,
+    STOPPED,
+    MAINTENANCE;
 }

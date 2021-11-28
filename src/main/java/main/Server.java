@@ -23,6 +23,9 @@ import java.util.HashMap;
 public class Server {
 
     private ConfigFile configFile;
+    private ServerSocket serverSocket;
+
+    private static final String CONTENT_TYPE = "Content-Type";
 
     private final ConfigFileWriter configFileWriter;
     private final RequestStartLineParser requestStartLineParser;
@@ -30,7 +33,6 @@ public class Server {
     private final ContentTypeProvider contentTypeProvider;
     private final HeaderParser headerParser;
     private final ResourceAbsolutePathProvider resourceAbsolutePathProvider;
-    private ServerSocket serverSocket;
 
     public Server(ConfigFile configFile) {
         this.configFile = configFile;
@@ -69,7 +71,7 @@ public class Server {
             HashMap<String, String> responseHeaders = new HashMap<>();
 
             if (requestStartLine == null) {
-                responseHeaders.put("Content-Type", "text/html; charset=UTF-8");
+                responseHeaders.put(CONTENT_TYPE, "text/html; charset=UTF-8");
 
                 writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_BAD_REQUEST, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/404.html"));
                 return;
@@ -77,18 +79,18 @@ public class Server {
 
             String line = in.readLine();
 
-            ArrayList<String> requestHeadersList = new ArrayList<String>();
+            ArrayList<String> requestHeadersList = new ArrayList<>();
 
             while (!line.isEmpty()) {
                 requestHeadersList.add(line);
                 line = in.readLine();
             }
 
-            if (!requestStartLine.method.equals("GET") && !requestStartLine.method.equals("HEAD")) {
+            if (!requestStartLine.getMethod().equals("GET") && !requestStartLine.getMethod().equals("HEAD")) {
 
-                responseHeaders.put("Content-Type", "text/html; charset=UTF-8");
+                responseHeaders.put(CONTENT_TYPE, "text/html; charset=UTF-8");
 
-                if (requestStartLine.method.equals("POST") && requestStartLine.target.equals("/configserver")) {
+                if (requestStartLine.getMethod().equals("POST") && requestStartLine.getTarget().equals("/configserver")) {
 
                     ConfigFile newConfigFile = new PostRequestHandlerImpl().getNewConfigFile(configFile, headerParser.parseHeaders(requestHeadersList));
 
@@ -99,7 +101,7 @@ public class Server {
 
                     writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_OK, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/200.html"));
 
-                    if (configFile.getState() == ServerState.Stopped) {
+                    if (configFile.getState() == ServerState.STOPPED) {
                         serverSocket.close();
                     }
 
@@ -114,15 +116,15 @@ public class Server {
 
             String pathToResponseBody;
 
-            if (configFile.getState() == ServerState.Maintenance) {
+            if (configFile.getState() == ServerState.MAINTENANCE) {
                 pathToResponseBody = configFile.getMaintenanceFilePath();
             } else {
-                pathToResponseBody = resourcePathManager.getResourcePath(configFile.getRootFolder(), requestStartLine.target);
+                pathToResponseBody = resourcePathManager.getResourcePath(configFile.getRootFolder(), requestStartLine.getTarget());
             }
 
             String contentType = contentTypeProvider.getContentType(pathToResponseBody);
 
-            responseHeaders.put("Content-Type", contentType);
+            responseHeaders.put(CONTENT_TYPE, contentType);
 
             writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_OK, pathToResponseBody);
 

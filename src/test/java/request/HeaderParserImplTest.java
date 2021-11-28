@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,13 +19,13 @@ public class HeaderParserImplTest {
 
     @Test
     public void parseHeaders_nullHeadersArray() {
-        HashMap<String, String> headersMap = headerParser.parseHeaders(null);
+        Map<String, String> headersMap = headerParser.parseHeaders(null);
         assertEquals(0, headersMap.size());
     }
 
     @Test
     public void parseHeaders_emptyHeadersArray() {
-        HashMap<String, String> headersMap = headerParser.parseHeaders(new ArrayList<String>());
+        Map<String, String> headersMap = headerParser.parseHeaders(new ArrayList<String>());
         assertEquals(0, headersMap.size());
     }
 
@@ -36,7 +36,7 @@ public class HeaderParserImplTest {
         headersList.add(null);
         headersList.add("Date: Wed, 25 Mar 2020 18:53:12 GMT");
 
-        HashMap<String, String> headersMap = headerParser.parseHeaders(headersList);
+        Map<String, String> headersMap = headerParser.parseHeaders(headersList);
         assertEquals(2, headersMap.size());
         assertEquals("en-US,en;q=0.5", headersMap.get("Accept-Language"));
         assertEquals("Wed, 25 Mar 2020 18:53:12 GMT", headersMap.get("Date"));
@@ -49,7 +49,7 @@ public class HeaderParserImplTest {
         headersList.add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
         headersList.add("Host: code.tutsplus.com");
 
-        HashMap<String, String> headersMap = headerParser.parseHeaders(headersList);
+        Map<String, String> headersMap = headerParser.parseHeaders(headersList);
         assertEquals(2, headersMap.size());
         assertEquals("ISO-8859-1,utf-8;q=0.7,*;q=0.7", headersMap.get("Accept-Charset"));
         assertEquals("code.tutsplus.com", headersMap.get("Host"));
@@ -61,7 +61,7 @@ public class HeaderParserImplTest {
         headersList.add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
         headersList.add("Host code.tutsplus.com");
 
-        HashMap<String, String> headersMap = headerParser.parseHeaders(headersList);
+        Map<String, String> headersMap = headerParser.parseHeaders(headersList);
         assertEquals(1, headersMap.size());
         assertEquals("ISO-8859-1,utf-8;q=0.7,*;q=0.7", headersMap.get("Accept-Charset"));
     }
@@ -71,7 +71,7 @@ public class HeaderParserImplTest {
         ArrayList<String> headersList = new ArrayList<>();
         headersList.add("Date: Wed, 25 Mar 2020 18:53:12 GMT");
 
-        HashMap<String, String> headersMap = headerParser.parseHeaders(headersList);
+        Map<String, String> headersMap = headerParser.parseHeaders(headersList);
         assertEquals(1, headersMap.size());
         assertEquals("Wed, 25 Mar 2020 18:53:12 GMT", headersMap.get("Date"));
     }
@@ -81,7 +81,7 @@ public class HeaderParserImplTest {
         ArrayList<String> headersList = new ArrayList<>();
         headersList.add("Host: code.tutsplus.com");
 
-        HashMap<String, String> headersMap = headerParser.parseHeaders(headersList);
+        Map<String, String> headersMap = headerParser.parseHeaders(headersList);
         assertEquals(1, headersMap.size());
         assertEquals("code.tutsplus.com", headersMap.get("Host"));
     }

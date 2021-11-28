@@ -9,6 +9,9 @@ public class ResourcePathManagerImpl implements ResourcePathManager {
     private final ResourceAbsolutePathProvider resourceAbsolutePathProvider;
     private final ResourceFileManager resourceFileManager;
 
+    private static final String PATH_DELIMITER = "/";
+    private static final String DEFAULT_PATH = "/index.html";
+
     public ResourcePathManagerImpl(ResourceAbsolutePathProvider resourceAbsolutePathProvider, ResourceFileManager resourceFileManager) {
         this.resourceAbsolutePathProvider = resourceAbsolutePathProvider;
         this.resourceFileManager = resourceFileManager;
@@ -16,7 +19,7 @@ public class ResourcePathManagerImpl implements ResourcePathManager {
 
     public String getResourcePath(String rootFolder, String path) {
         if (path == null || path.isEmpty() || path.equals("/")) {
-            path = "/index.html";
+            path = DEFAULT_PATH;
         }
 
         char lastCharOfRootFolder = rootFolder.charAt(rootFolder.length() - 1);
@@ -27,7 +30,7 @@ public class ResourcePathManagerImpl implements ResourcePathManager {
         if (lastCharOfRootFolder == '/' && firstCharOfPath == '/') {
             resourcePath = rootFolder.substring(0, rootFolder.length() - 1) + path;
         } else if (lastCharOfRootFolder != '/' && firstCharOfPath != '/') {
-            resourcePath = rootFolder + "/" + path;
+            resourcePath = rootFolder + PATH_DELIMITER + path;
         } else {
             resourcePath = rootFolder + path;
         }

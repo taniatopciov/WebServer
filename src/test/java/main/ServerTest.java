@@ -36,7 +36,7 @@ public class ServerTest {
 
 
                 out.println("POST /configserver HTTP/1.1");
-                out.println("ServerState: Stopped");
+                out.println("ServerState: STOPPED");
                 out.println();
 
                 String line = in.readLine();

@@ -25,12 +25,12 @@ public class PostRequestHandlerImplTest {
         HashMap<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("Location", "http://www.google.com/");
         requestHeaders.put("Expires", "Fri, 24 Apr 2020 18:53:12 GMT");
-        requestHeaders.put("ServerState", "Running");
+        requestHeaders.put("ServerState", "RUNNING");
         requestHeaders.put("Server", "gws");
 
         ConfigFile newConfigFile = postRequestHandler.getNewConfigFile(configFile, requestHeaders);
 
-        assertEquals(ServerState.Running, newConfigFile.getState());
+        assertEquals(ServerState.RUNNING, newConfigFile.getState());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class PostRequestHandlerImplTest {
         requestHeaders.put("Location", "http://www.google.com/");
         requestHeaders.put("MaintenanceFilePath", "myPath.html");
         requestHeaders.put("Expires", "Fri, 24 Apr 2020 18:53:12 GMT");
-        requestHeaders.put("ServerState", "Maintenance");
+        requestHeaders.put("ServerState", "MAINTENANCE");
         requestHeaders.put("Server", "gws");
         requestHeaders.put("RootFolder", "my_root_folder");
 
@@ -79,7 +79,7 @@ public class PostRequestHandlerImplTest {
 
         assertEquals("my_root_folder", newConfigFile.getRootFolder());
         assertEquals("myPath.html", newConfigFile.getMaintenanceFilePath());
-        assertEquals(ServerState.Maintenance, newConfigFile.getState());
+        assertEquals(ServerState.MAINTENANCE, newConfigFile.getState());
     }
 
     @Test

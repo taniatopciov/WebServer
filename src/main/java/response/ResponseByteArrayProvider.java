@@ -1,9 +1,9 @@
 package response;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 public interface ResponseByteArrayProvider {
 
-    public byte[] getResponseBytes(ResponseStatusLine responseStatusLine, HashMap<String, String> headers, String pathToBody) throws IOException;
+    public byte[] getResponseBytes(ResponseStatusLine responseStatusLine, Map<String, String> headers, String pathToBody) throws IOException;
 }

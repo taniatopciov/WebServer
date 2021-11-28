@@ -1,28 +1,24 @@
 package resource_manager;
 
 public class ContentTypeProviderImpl implements ContentTypeProvider {
+    private static final String CHARSET_UTF_8 = "charset=utf-8";
+
     @Override
     public String getContentType(String fileName) {
         String fileExtension = getFileExtension(fileName);
 
         switch (fileExtension) {
-            case "gif":
-            case "png":
-            case "tiff":
+            case "gif", "png", "tiff":
                 return addSlashBetweenStrings("image", fileExtension);
-            case "jpeg":
-            case "jpg":
+            case "jpeg", "jpg":
                 return addSlashBetweenStrings("image", "jpeg");
-            case "csv":
-            case "css":
-            case "xml":
-                return addSlashBetweenStrings("text", fileExtension) + "; charset=utf-8";
-            case "html":
-            case "htm":
-                return addSlashBetweenStrings("text", "html") + "; charset=utf-8";
+            case "csv", "css", "xml":
+                return addSlashBetweenStrings("text", fileExtension) + "; " + CHARSET_UTF_8;
+            case "html", "htm":
+                return addSlashBetweenStrings("text", "html") + "; " + CHARSET_UTF_8;
             case "txt":
             default:
-                return addSlashBetweenStrings("text", "plain") + "; charset=utf-8";
+                return addSlashBetweenStrings("text", "plain") + "; " + CHARSET_UTF_8;
         }
     }
 

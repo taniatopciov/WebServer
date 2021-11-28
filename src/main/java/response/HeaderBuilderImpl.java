@@ -1,10 +1,10 @@
 package response;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class HeaderBuilderImpl implements HeaderBuilder {
 
-    public String buildHeaders(HashMap<String, String> headers) {
+    public String buildHeaders(Map<String, String> headers) {
         if (headers == null || headers.isEmpty()) {
             return "\r\n";
         }

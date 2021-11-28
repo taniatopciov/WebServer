@@ -54,8 +54,8 @@ public class RequestStartLineParserTest {
     @Test
     public void parseRequest_correct() {
         RequestStartLine requestStartLine = requestStartLineParser.parseRequestStartLine("GET /this/resource HTTP/1.1");
-        assertEquals("GET", requestStartLine.method);
-        assertEquals("/this/resource", requestStartLine.target);
-        assertEquals("HTTP/1.1", requestStartLine.version);
+        assertEquals("GET", requestStartLine.getMethod());
+        assertEquals("/this/resource", requestStartLine.getTarget());
+        assertEquals("HTTP/1.1", requestStartLine.getVersion());
     }
 }

@@ -1,7 +1,7 @@
 package response;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public interface HeaderBuilder {
-    public String buildHeaders(HashMap<String, String> headers);
+    public String buildHeaders(Map<String, String> headers);
 }

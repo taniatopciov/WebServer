@@ -7,8 +7,9 @@ import java.io.IOException;
 
 public class ConfigFileWriter {
 
+    private static final String CONFIG_FILE_PATH = "config.json";
+
     private final FileContentWriter contentWriter;
-    private final String configFilePath = "config.json";
     private final Gson gson = new Gson();
 
     public ConfigFileWriter(FileContentWriter contentWriter) {
@@ -20,6 +21,6 @@ public class ConfigFileWriter {
             configFile = new ConfigFile();
         }
 
-        contentWriter.writeContentToFile(configFilePath, gson.toJson(configFile));
+        contentWriter.writeContentToFile(CONFIG_FILE_PATH, gson.toJson(configFile));
     }
 }

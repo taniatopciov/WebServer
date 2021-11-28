@@ -28,16 +28,16 @@ public class ConfigFileWriterTest {
     public void writeConfigFile_NullConfigFile() throws IOException {
         configFileWriter.writeConfigFile(null);
 
-        String expectedJsonOutput = "{\"portNumber\":\"8080\",\"rootFolder\":\"public_html\",\"maintenanceFilePath\":\"maintenance.html\",\"state\":\"Stopped\"}";
+        String expectedJsonOutput = "{\"portNumber\":\"8080\",\"rootFolder\":\"public_html\",\"maintenanceFilePath\":\"maintenance.html\",\"state\":\"STOPPED\"}";
 
         verify(contentWriter, times(1)).writeContentToFile("config.json", expectedJsonOutput);
     }
 
     @Test
     public void writeConfigFile_GivenConfigFile() throws IOException {
-        configFileWriter.writeConfigFile(new ConfigFile("1234", "www", "path.html", ServerState.Maintenance));
+        configFileWriter.writeConfigFile(new ConfigFile("1234", "www", "path.html", ServerState.MAINTENANCE));
 
-        String expectedJsonOutput = "{\"portNumber\":\"1234\",\"rootFolder\":\"www\",\"maintenanceFilePath\":\"path.html\",\"state\":\"Maintenance\"}";
+        String expectedJsonOutput = "{\"portNumber\":\"1234\",\"rootFolder\":\"www\",\"maintenanceFilePath\":\"path.html\",\"state\":\"MAINTENANCE\"}";
 
         verify(contentWriter, times(1)).writeContentToFile("config.json", expectedJsonOutput);
     }

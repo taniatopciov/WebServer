@@ -6,10 +6,11 @@ import resource_manager.ResourceAbsolutePathProviderImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ResponseByteArrayProviderImpl implements ResponseByteArrayProvider {
     @Override
-    public byte[] getResponseBytes(ResponseStatusLine responseStatusLine, HashMap<String, String> headers, String pathToBody) throws IOException {
+    public byte[] getResponseBytes(ResponseStatusLine responseStatusLine, Map<String, String> headers, String pathToBody) throws IOException {
         if (responseStatusLine == null || headers == null || headers.isEmpty() || pathToBody == null || pathToBody.isEmpty()) {
             responseStatusLine = new ResponseStatusLine("HTTP/1.1", HttpStatus.SC_INTERNAL_SERVER_ERROR);
 

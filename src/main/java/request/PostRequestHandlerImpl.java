@@ -3,11 +3,11 @@ package request;
 import config.ConfigFile;
 import config.ServerState;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class PostRequestHandlerImpl implements PostRequestHandler {
     @Override
-    public ConfigFile getNewConfigFile(ConfigFile configFile, HashMap<String, String> requestHeaders) {
+    public ConfigFile getNewConfigFile(ConfigFile configFile, Map<String, String> requestHeaders) {
         if (requestHeaders.containsKey("ServerState")) {
             ServerState serverState = ServerState.valueOf(requestHeaders.get("ServerState"));
             configFile.setState(serverState);

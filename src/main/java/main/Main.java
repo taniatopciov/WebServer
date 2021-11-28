@@ -6,7 +6,7 @@ import io.JsonParserImpl;
 
 public class Main {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             new Server(new ConfigFileReader(new JsonParserImpl(new FileContentReaderImpl())).readConfigFile()).startServer();
         } catch (Exception e) {
