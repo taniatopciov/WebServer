@@ -56,6 +56,7 @@ public class Server {
                 thread.start();
             }
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ServerCloseException();
         }
     }
@@ -73,7 +74,7 @@ public class Server {
             if (requestStartLine == null) {
                 responseHeaders.put(CONTENT_TYPE, "text/html; charset=UTF-8");
 
-                writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_BAD_REQUEST, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/404.html"));
+                writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_BAD_REQUEST, resourceAbsolutePathProvider.getResourceAbsolutePath("DefaultResponses/400.html"));
                 return;
             }
 
@@ -126,7 +127,11 @@ public class Server {
 
             responseHeaders.put(CONTENT_TYPE, contentType);
 
-            writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_OK, pathToResponseBody);
+            if (pathToResponseBody.endsWith("404.html")) {
+                writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_NOT_FOUND, pathToResponseBody);
+            } else {
+                writeResponseAndCloseConnection(socket, dataOut, responseHeaders, HttpStatus.SC_OK, pathToResponseBody);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
