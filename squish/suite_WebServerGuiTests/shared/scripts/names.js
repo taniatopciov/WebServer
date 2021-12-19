@@ -1,0 +1,27 @@
+import { RegularExpression, Wildcard } from 'objectmaphelper.js';
+
+export var serverSettingsStage = {"caption": "Server Settings", "type": "javafx.stage.Stage", "visible": true};
+export var serverSettingsRequestTextFieldTextField = {"id": "request_text_field", "type": "javafx.scene.control.TextField", "visible": true, "window": serverSettingsStage};
+export var serverSettingsSendButton = {"caption": "Send", "id": "send_request_button", "type": "javafx.scene.control.Button", "visible": true, "window": serverSettingsStage};
+export var serverSettingsFAILEDLabel = {"caption": "FAILED", "id": "request_label", "type": "javafx.scene.control.Label", "visible": true, "window": serverSettingsStage};
+export var serverSettingsSTARTButton = {"caption": "START", "id": "start_server_button", "type": "javafx.scene.control.Button", "visible": true, "window": serverSettingsStage};
+export var serverSettings404Label = {"caption": 404, "id": "request_label", "type": "javafx.scene.control.Label", "visible": true, "window": serverSettingsStage};
+export var o404404Text = {"caption": 404, "container": serverSettings404Label, "styletype": "text", "visible": true};
+export var serverSettingsOKLabel = {"caption": "OK", "id": "request_label", "type": "javafx.scene.control.Label", "visible": true, "window": serverSettingsStage};
+export var oKOKText = {"caption": "OK", "container": serverSettingsOKLabel, "styletype": "text", "visible": true};
+export var sTARTSTARTText = {"caption": "START", "container": serverSettingsSTARTButton, "styletype": "text", "visible": true};
+export var serverSettingsSTOPButton = {"caption": "STOP", "id": "stop_server_button", "type": "javafx.scene.control.Button", "visible": true, "window": serverSettingsStage};
+export var serverSettingsSwitchToMaintenanceModeCheckBox = {"caption": "Switch to maintenance mode", "id": "switch_to_maintenance_checkbox", "type": "javafx.scene.control.CheckBox", "visible": true, "window": serverSettingsStage};
+export var serverSettings90Label = {"caption": 90, "id": "server_port", "type": "javafx.scene.control.Label", "visible": true, "window": serverSettingsStage};
+export var serverSettingsPortTextFieldTextField = {"id": "port_text_field", "type": "javafx.scene.control.TextField", "visible": true, "window": serverSettingsStage};
+export var serverSettingsApplyChangesButton = {"caption": "Apply changes", "id": "apply_changes_button", "type": "javafx.scene.control.Button", "visible": true, "window": serverSettingsStage};
+export var serverSettings8080Label = {"caption": 8080, "id": "server_port", "type": "javafx.scene.control.Label", "visible": true, "window": serverSettingsStage};
+export var serverSettingsButton = {"caption": "...", "id": "select_web_root_directory_button", "type": "javafx.scene.control.Button", "visible": true, "window": serverSettingsStage};
+export var squishJavaFX = "SquishJavaFX";
+export var serverSettingsWebRootDirectoryTextFieldTextField = {"id": "web_root_directory_text_field", "type": "javafx.scene.control.TextField", "visible": true, "window": serverSettingsStage};
+export var webRootDirectoryTextFieldCUsersTaniaDesktopSO2021CorinaDirText = {"caption": "C:\\Users\\tania\\Desktop\\SO2021\\Corina\\dir", "container": serverSettingsWebRootDirectoryTextFieldTextField, "styletype": "text", "visible": true};
+export var webRootDirectoryTextFieldCUsersTaniaDesktopTestSiteVVSTestSiteText = {"caption": "C:\\Users\\tania\\Desktop\\TestSiteVVS\\TestSite", "container": serverSettingsWebRootDirectoryTextFieldTextField, "styletype": "text", "visible": true};
+export var serverSettingsMaintenanceDirectoryTextFieldTextField = {"id": "maintenance_directory_text_field", "type": "javafx.scene.control.TextField", "visible": true, "window": serverSettingsStage};
+export var maintenanceDirectoryTextFieldCUsersTaniaDesktopTestSiteVVSMaintenanceHtmlText = {"caption": "C:\\Users\\tania\\Desktop\\TestSiteVVS\\maintenance.html", "container": serverSettingsMaintenanceDirectoryTextFieldTextField, "styletype": "text", "visible": true};
+export var serverSettingsButton_2 = {"caption": "...", "id": "select_maintenance_directory_button", "type": "javafx.scene.control.Button", "visible": true, "window": serverSettingsStage};
+export var maintenanceDirectoryTextFieldCUsersTaniaDocumentsScoreTxtText = {"caption": "C:\\Users\\tania\\Documents\\score.txt", "container": serverSettingsMaintenanceDirectoryTextFieldTextField, "styletype": "text", "visible": true};
