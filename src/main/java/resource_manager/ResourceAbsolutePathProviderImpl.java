@@ -10,12 +10,15 @@ public class ResourceAbsolutePathProviderImpl implements ResourceAbsolutePathPro
         URL resourceURL = getClass().getClassLoader().getResource(simplePath);
         if (resourceURL != null) {
             try {
-                return Paths.get(resourceURL.toURI()).toFile().getAbsolutePath();
+                if (resourceURL.toURI().toString().contains("!")) {
+                    return simplePath;
+                } else {
+                    return Paths.get(resourceURL.toURI()).toFile().getAbsolutePath();
+                }
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
         }
-
         return "";
     }
 }
